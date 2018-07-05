@@ -1,2 +1,5 @@
+.idea
 .toDelete
+logback.log
+logfile.log
 target

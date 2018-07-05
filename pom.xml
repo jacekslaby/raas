@@ -12,25 +12,60 @@
   <dependencies>
     <!-- https://mvnrepository.com/artifact/com.datastax.cassandra/cassandra-driver-core -->
     <dependency>
-        <groupId>com.datastax.cassandra</groupId>
-        <artifactId>cassandra-driver-core</artifactId>
-        <version>3.5.0</version>
+      <groupId>com.datastax.cassandra</groupId>
+      <artifactId>cassandra-driver-core</artifactId>
+      <version>3.5.0</version>
     </dependency>
-    
+
+    <!-- https://github.com/jsevellec/cassandra-unit/wiki/Spring-for-Cassandra-unit -->
     <!-- https://mvnrepository.com/artifact/org.cassandraunit/cassandra-unit -->
     <dependency>
-        <groupId>org.cassandraunit</groupId>
-        <artifactId>cassandra-unit</artifactId>
-        <version>3.5.0.1</version>
-        <scope>test</scope>
+      <groupId>org.cassandraunit</groupId>
+      <artifactId>cassandra-unit</artifactId>
+      <version>3.5.0.1</version>
+      <scope>test</scope>
+      
+      <!-- <exclusions>
+        <exclusion> 
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+      </exclusions> -->
     </dependency>
-    
+
+    <!-- https://mvnrepository.com/artifact/org.cassandraunit/cassandra-unit-spring -->
+    <dependency>
+      <groupId>org.cassandraunit</groupId>
+      <artifactId>cassandra-unit-spring</artifactId>
+      <version>3.5.0.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>5.0.7.RELEASE</version>
+      <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+    <!--
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.25</version>
+      <scope>test</scope>
+    </dependency>
+    -->
+    
   </dependencies>
   
   <build>
