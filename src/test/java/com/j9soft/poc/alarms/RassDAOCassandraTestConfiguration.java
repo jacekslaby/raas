@@ -27,15 +27,15 @@ public class RassDAOCassandraTestConfiguration {
 
     private CassandraConnector client;
 
-    public RassDAOCassandraTestConfiguration() {
+    public RassDAOCassandraTestConfiguration(boolean withEmptyDatabase) {
         client = new CassandraConnector();
         client.connect("127.0.0.1", 9142);
 
-        CQLDataLoader dataLoader = new CQLDataLoader(client.getSession());
-        dataLoader.load(new ClassPathCQLDataSet("testDataSet.xml", RaasDAOCassandra.KEYSPACE_NAME));
-
-        // "raas-cassandra-test-dataset.json", keyspace = "raas")
-
+        if (!withEmptyDatabase) {
+            // We should populate the database with sample data.
+            CQLDataLoader dataLoader = new CQLDataLoader(client.getSession());
+            dataLoader.load(new ClassPathCQLDataSet("testDataSet.xml", RaasDAOCassandra.KEYSPACE_NAME));
+        }
     }
 
     public RaasDAO getDAO() {
