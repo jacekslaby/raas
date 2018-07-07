@@ -4,7 +4,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
-public class RaasDAOCassandra implements RaasDAO {
+public class RaasDaoCassandra implements RaasDao {
 
     static final String KEYSPACE_NAME = "raas";
     private static final String REPLICATION_STRATEGY = "SimpleStrategy";  // @TODO configurable
@@ -14,7 +14,7 @@ public class RaasDAOCassandra implements RaasDAO {
 
     private Session session;
 
-    public RaasDAOCassandra(Session session) {
+    public RaasDaoCassandra(Session session) {
         this.session = session;
         this.createKeyspaceIfMissing();
         this.createTableIfMissing();

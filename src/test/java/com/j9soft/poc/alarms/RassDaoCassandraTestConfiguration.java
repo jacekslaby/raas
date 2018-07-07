@@ -6,7 +6,7 @@ import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 
 //@Configuration
-public class RassDAOCassandraTestConfiguration {
+public class RassDaoCassandraTestConfiguration {
 
     public static class AlarmDetails {
         String domain;
@@ -27,19 +27,19 @@ public class RassDAOCassandraTestConfiguration {
 
     private CassandraConnector client;
 
-    public RassDAOCassandraTestConfiguration(boolean withEmptyDatabase) {
+    public RassDaoCassandraTestConfiguration(boolean withEmptyDatabase) {
         client = new CassandraConnector();
         client.connect("127.0.0.1", 9142);
 
         if (!withEmptyDatabase) {
             // We should populate the database with sample data.
             CQLDataLoader dataLoader = new CQLDataLoader(client.getSession());
-            dataLoader.load(new ClassPathCQLDataSet("testDataSet.xml", RaasDAOCassandra.KEYSPACE_NAME));
+            dataLoader.load(new ClassPathCQLDataSet("testDataSet.xml", RaasDaoCassandra.KEYSPACE_NAME));
         }
     }
 
-    public RaasDAO getDAO() {
-        return new RaasDAOCassandra(this.client.getSession());
+    public RaasDao getDao() {
+        return new RaasDaoCassandra(this.client.getSession());
     }
 
     public void close() {

@@ -8,17 +8,17 @@ import org.junit.*;
 
 import java.io.IOException;
 
-import static com.j9soft.poc.alarms.RassDAOCassandraTestConfiguration.EXISTING_ALARM;
+import static com.j9soft.poc.alarms.RassDaoCassandraTestConfiguration.EXISTING_ALARM;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration
-public class RaasDAOCassandraTest {
+public class RaasDaoCassandraTest {
 
-    private static RassDAOCassandraTestConfiguration testConfig;
-    private RaasDAO cassandraDAO;
+    private static RassDaoCassandraTestConfiguration testConfig;
+    private RaasDao cassandraDao;
 
     @BeforeClass
     public static void init() throws IOException, TTransportException {
@@ -31,18 +31,18 @@ public class RaasDAOCassandraTest {
         Session session = EmbeddedCassandraServerHelper.getSession();
 
         // Connect to the embedded DB.
-        testConfig = new RassDAOCassandraTestConfiguration(false);
+        testConfig = new RassDaoCassandraTestConfiguration(false);
     }
 
     @Before
-    public void initDAO() {
+    public void initDao() {
         // Create bean to be tested.
-        cassandraDAO = testConfig.getDAO();
+        cassandraDao = testConfig.getDao();
     }
 
     @Test
     public void whenGettingAnExistingAlarm_thenReturnIt() {
-        String json = cassandraDAO.queryAlarm(
+        String json = cassandraDao.queryAlarm(
                 EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
 
         assertThat(json, is(EXISTING_ALARM.json));
@@ -59,14 +59,14 @@ public class RaasDAOCassandraTest {
     }
 
     @Test
-    public void whenTableExists_thenDataShouldSurviveDAOReconnect() {
+    public void whenTableExists_thenDataShouldSurviveDaoReconnect() {
         // Disconnect.
         testConfig.close();
         // Connect again to the embedded DB.  (do not create test data again !)
-        testConfig = new RassDAOCassandraTestConfiguration(false);
-        cassandraDAO = testConfig.getDAO();
+        testConfig = new RassDaoCassandraTestConfiguration(false);
+        cassandraDao = testConfig.getDao();
 
-        String json = cassandraDAO.queryAlarm(
+        String json = cassandraDao.queryAlarm(
                 EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
 
         assertThat(json, is(EXISTING_ALARM.json));
@@ -78,6 +78,6 @@ public class RaasDAOCassandraTest {
         testConfig.close();
 
         // required because we have another Test class in this test run
-        EmbeddedCassandraServerHelper.cleanDataEmbeddedCassandra(RaasDAOCassandra.KEYSPACE_NAME);
+        EmbeddedCassandraServerHelper.cleanDataEmbeddedCassandra(RaasDaoCassandra.KEYSPACE_NAME);
     }
 }
