@@ -6,7 +6,7 @@ import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 
 //@Configuration
-public class RassDaoCassandraTestConfiguration {
+public class RaasDaoCassandraTestConfiguration {
 
     public static class AlarmDetails {
         String domain;
@@ -27,7 +27,7 @@ public class RassDaoCassandraTestConfiguration {
 
     private CassandraConnector client;
 
-    public RassDaoCassandraTestConfiguration(boolean withEmptyDatabase) {
+    public RaasDaoCassandraTestConfiguration(boolean withEmptyDatabase) {
         client = new CassandraConnector();
         client.connect("127.0.0.1", 9142);
 
