@@ -8,7 +8,7 @@ import org.junit.*;
 
 import java.io.IOException;
 
-import static com.j9soft.poc.alarms.RassDaoCassandraTestConfiguration.EXISTING_ALARM;
+import static com.j9soft.poc.alarms.RaasDaoCassandraTestConfiguration.EXISTING_ALARM;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
@@ -17,7 +17,7 @@ import static org.junit.Assert.fail;
 //@ContextConfiguration
 public class RaasDaoCassandraTest {
 
-    private static RassDaoCassandraTestConfiguration testConfig;
+    private static RaasDaoCassandraTestConfiguration testConfig;
     private RaasDao cassandraDao;
 
     @BeforeClass
@@ -31,7 +31,7 @@ public class RaasDaoCassandraTest {
         Session session = EmbeddedCassandraServerHelper.getSession();
 
         // Connect to the embedded DB.
-        testConfig = new RassDaoCassandraTestConfiguration(false);
+        testConfig = new RaasDaoCassandraTestConfiguration(false);
     }
 
     @Before
@@ -63,7 +63,7 @@ public class RaasDaoCassandraTest {
         // Disconnect.
         testConfig.close();
         // Connect again to the embedded DB.  (do not create test data again !)
-        testConfig = new RassDaoCassandraTestConfiguration(false);
+        testConfig = new RaasDaoCassandraTestConfiguration(false);
         cassandraDao = testConfig.getDao();
 
         String json = cassandraDao.queryAlarm(
