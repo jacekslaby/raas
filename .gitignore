@@ -2,4 +2,5 @@
 .toDelete
 logback.log
 logfile.log
+PS
 target
