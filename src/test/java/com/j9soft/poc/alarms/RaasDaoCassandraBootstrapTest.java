@@ -9,14 +9,14 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static com.j9soft.poc.alarms.RassDaoCassandraTestConfiguration.EXISTING_ALARM;
+import static com.j9soft.poc.alarms.RaasDaoCassandraTestConfiguration.EXISTING_ALARM;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.fail;
 
-public class RassDaoCassandraBootstrapTest {
-    private static RassDaoCassandraTestConfiguration testConfig;
+public class RaasDaoCassandraBootstrapTest {
+    private static RaasDaoCassandraTestConfiguration testConfig;
     private RaasDao cassandraDao;
 
     @BeforeClass
@@ -25,7 +25,7 @@ public class RassDaoCassandraBootstrapTest {
         EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
 
         // Connect to the embedded DB.
-        testConfig = new RassDaoCassandraTestConfiguration(true);
+        testConfig = new RaasDaoCassandraTestConfiguration(true);
     }
 
     @Before
