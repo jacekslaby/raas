@@ -43,6 +43,20 @@ public class RaasDaoCassandraBootstrapTest {
         assertThat(json, isEmptyOrNullString());
     }
 
+    @Test
+    public void whenUpsertingAMissingAlarm_thenCreateIt() {
+
+        fail("@TODO: first we need to update an alarm, i.e. we need a method for it in RaasDao.");
+
+        // cassandraDao.upsertAlarm(EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier, ....);
+
+        String json = cassandraDao.queryAlarm(
+                EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
+
+        assertThat(json, is(EXISTING_ALARM.json));
+
+    }
+
     @AfterClass
     public static void cleanup() {
         testConfig.close();

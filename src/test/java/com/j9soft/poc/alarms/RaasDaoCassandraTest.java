@@ -11,6 +11,7 @@ import java.io.IOException;
 import static com.j9soft.poc.alarms.RaasDaoCassandraTestConfiguration.EXISTING_ALARM;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
 import static org.junit.Assert.fail;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -25,19 +26,22 @@ public class RaasDaoCassandraTest {
         // Start an embedded Cassandra Server
         EmbeddedCassandraServerHelper.startEmbeddedCassandra(20000L);
 
-        // We do not use them and yet we must execute it.
+        // Connect to the embedded DB.
+        testConfig = new RaasDaoCassandraTestConfiguration(false);
+
+
+        // Unwanted code, but... :/
+        //
+        // We do not use these variables and yet we must execute those methods.
         //  (otherwise there is an NPE in cleanDataEmbeddedCassandra() in cleanup() code later)
         Cluster cluster = EmbeddedCassandraServerHelper.getCluster();
         Session session = EmbeddedCassandraServerHelper.getSession();
-
-        // Connect to the embedded DB.
-        testConfig = new RaasDaoCassandraTestConfiguration(false);
     }
 
     @Before
     public void initDao() {
         // Create bean to be tested.
-        cassandraDao = testConfig.getDao();
+        this.cassandraDao = testConfig.getDao();
     }
 
     @Test
@@ -49,13 +53,17 @@ public class RaasDaoCassandraTest {
     }
 
     @Test
-    public void whenUpsertingAMissingAlarm_thenCreateIt() {
-        fail("@TODO");
-    }
-
-    @Test
     public void whenUpsertingAnExistingAlarm_thenUpdateIt() {
-        fail("@TODO");
+        final String newJson = "Bolek i Lolek";
+
+        fail("@TODO: first we need to update an alarm, i.e. we need a method for it in RaasDao.");
+
+        // cassandraDao.upsertAlarm(....);
+
+        String json = cassandraDao.queryAlarm(
+                EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
+
+        assertThat(json, is(newJson));
     }
 
     @Test
@@ -71,7 +79,6 @@ public class RaasDaoCassandraTest {
 
         assertThat(json, is(EXISTING_ALARM.json));
     }
-
 
     @AfterClass
     public static void cleanup() {
