@@ -5,17 +5,15 @@ import com.datastax.driver.core.Session;
 import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
 import org.junit.*;
+import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
 
 import static com.j9soft.poc.alarms.RaasDaoCassandraTestConfiguration.EXISTING_ALARM;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.is;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RaasDaoCassandraTest {
 
     private static RaasDaoCassandraTestConfiguration testConfig;
@@ -38,6 +36,14 @@ public class RaasDaoCassandraTest {
         Session session = EmbeddedCassandraServerHelper.getSession();
     }
 
+    @AfterClass
+    public static void cleanup() {
+        testConfig.close();
+
+        // required because we have another Test class in this test run
+        EmbeddedCassandraServerHelper.cleanDataEmbeddedCassandra(RaasDaoCassandra.KEYSPACE_NAME);
+    }
+
     @Before
     public void initDao() {
         // Create bean to be tested.
@@ -50,20 +56,6 @@ public class RaasDaoCassandraTest {
                 EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
 
         assertThat(json, is(EXISTING_ALARM.json));
-    }
-
-    @Test
-    public void whenUpsertingAnExistingAlarm_thenUpdateIt() {
-        final String newJson = "Bolek i Lolek";
-
-        fail("@TODO: first we need to update an alarm, i.e. we need a method for it in RaasDao.");
-
-        // cassandraDao.upsertAlarm(....);
-
-        String json = cassandraDao.queryAlarm(
-                EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
-
-        assertThat(json, is(newJson));
     }
 
     @Test
@@ -80,11 +72,17 @@ public class RaasDaoCassandraTest {
         assertThat(json, is(EXISTING_ALARM.json));
     }
 
-    @AfterClass
-    public static void cleanup() {
-        testConfig.close();
+    @Test
+    public void whenUpsertingAnExistingAlarm_thenUpdateIt() {
+        final String newJson = "Bolek i Lolek";
 
-        // required because we have another Test class in this test run
-        EmbeddedCassandraServerHelper.cleanDataEmbeddedCassandra(RaasDaoCassandra.KEYSPACE_NAME);
+        cassandraDao.createOrPatchAlarm(EXISTING_ALARM.domain, EXISTING_ALARM.adapterName,
+                EXISTING_ALARM.notificationIdentifier, newJson);
+
+        String json = cassandraDao.queryAlarm(
+                EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
+
+        assertThat(json, is(newJson));
     }
+
 }

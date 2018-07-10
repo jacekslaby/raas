@@ -1,5 +1,6 @@
 package com.j9soft.poc.alarms;
 
+import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
@@ -65,5 +66,19 @@ public class RaasDaoCassandra implements RaasDao {
         }
 
         return row.getString(0);
+    }
+
+    @Override
+    public void createOrPatchAlarm(String domain, String adapterName, String notificationIdentifier, String value) {
+
+        StringBuilder sb = new StringBuilder("INSERT INTO ")
+                .append(KEYSPACE_NAME).append(".raw_active_alarms")
+                .append(" (virtual_partition, adapter_name, notification_identifier, d) VALUES (?,?,?,?);");
+
+        final String query = sb.toString();
+
+        PreparedStatement prepared = session.prepare(query);
+
+        session.execute( prepared.bind(0, adapterName, notificationIdentifier, value) );
     }
 }

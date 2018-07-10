@@ -71,7 +71,7 @@ public class AuthorizationHeaderJwtFilter extends GenericFilterBean {
                     throw new ServletException("Invalid token - wrong adapterName:" + adapterName);
                 }
 
-                request.setAttribute("claims", new AuthorizationHeaderClaims(domain.trim(), adapterName.trim()));
+                request.setAttribute("partitionDefinition", new RawAlarmsPartitionDefinition(domain.trim(), adapterName.trim()));
             }
 
             filterChain.doFilter(request, response);
@@ -85,6 +85,6 @@ public class AuthorizationHeaderJwtFilter extends GenericFilterBean {
         // In development mode, if client does not provide JWT token, then we assume defaults.
         //  (In order to make it easier for newbie developers.)
         //
-        request.setAttribute("claims", new AuthorizationHeaderClaims("dev", "AdapterTest"));
+        request.setAttribute("claims", new RawAlarmsPartitionDefinition("dev", "AdapterTest"));
     }
 }

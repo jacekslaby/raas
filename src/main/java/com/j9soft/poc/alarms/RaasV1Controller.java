@@ -1,7 +1,5 @@
 package com.j9soft.poc.alarms;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,30 +29,28 @@ public class RaasV1Controller implements RaasV1 {
     }
 
     @Override
-    @GetMapping
-    @RequestMapping("/v1/rawalarms")
+    @GetMapping("/v1/rawalarms")
     public String rawAlarms(@RequestParam(value = "notificationIdentifier") String notificationIdentifier) {
 
-        return this.raasDao.queryAlarm("todo", "todo", notificationIdentifier);
+        logger.info("rawAlarms(notificationIdentifier='{}')", notificationIdentifier);
 
-        //return "{\"ala\":\"ma kota\"}";
+        return this.raasDao.queryAlarm("todo", "todo", notificationIdentifier);
     }
 
-    // @Override  // @TODO I should define a correct method name in the interface
-    @GetMapping   // @TODO It should be: @PutMapping
-    @RequestMapping("/v1/rawalarms/{notificationIdentifier}")
-    public String putAlarm(@PathVariable("notificationIdentifier") String notificationIdentifier,
-            @RequestAttribute(name = "claims") AuthorizationHeaderClaims claims) {
+    // Note: Using PATCH in this way is discouraged in  https://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/
+    //   and yet neither PUT nor POST fit here.  (because client can use this method as 'upsert', i.e. create or partially update)
+    //
+    @Override
+    @PatchMapping("/v1/rawalarms/{notificationIdentifier}")
+    public void patchRawAlarm(@PathVariable("notificationIdentifier") String notificationIdentifier,
+                              @RequestAttribute(name = "partitionDefinition") RawAlarmsPartitionDefinition partitionDefinition,
+                              @RequestBody String valueObjectAsJson) {
 
-        ObjectMapper mapper = new ObjectMapper();
+        logger.info("patchRawAlarm(notificationIdentifier='{}', domain='{}', adapterName='{}')",
+                notificationIdentifier, partitionDefinition.getDomain(), partitionDefinition.getAdapterName());
 
-        try {
-            return mapper.writeValueAsString(claims);
-
-        } catch (JsonProcessingException e) {
-            logger.info("putAlarm", notificationIdentifier, e);
-            return "Authorization Header - Claims exception was logged.";
-        }
+        this.raasDao.createOrPatchAlarm(partitionDefinition.getDomain(), partitionDefinition.getAdapterName(),
+                notificationIdentifier, valueObjectAsJson);
     }
 
     @PostConstruct

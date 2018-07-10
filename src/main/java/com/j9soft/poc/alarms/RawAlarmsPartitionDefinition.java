@@ -1,19 +1,19 @@
 package com.j9soft.poc.alarms;
 
-public class AuthorizationHeaderClaims {
+class RawAlarmsPartitionDefinition {
     private String domain;
     private String adapterName;
 
-    AuthorizationHeaderClaims(String domain, String adapterName) {
+    RawAlarmsPartitionDefinition(String domain, String adapterName) {
         this.domain = domain;
         this.adapterName = adapterName;
     }
 
-    public String getAdapterName() {
+    String getAdapterName() {
         return this.adapterName;
     }
 
-    public String getDomain() {
+    String getDomain() {
         return this.domain;
     }
 
