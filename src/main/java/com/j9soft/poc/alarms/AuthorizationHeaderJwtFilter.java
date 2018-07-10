@@ -16,7 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /*
- * https://aboullaite.me/spring-boot-token-authentication-using-jwt/
+ * How to generate a dev token - https://jwt.io/
+ * Example token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb21haW4iOiJDQWRldiIsImFkYXB0ZXJOYW1lIjoiQWRhcHRlclRlc3QiLCJpYXQiOjE1MTYyMzkwMjJ9.gnwRsh2DMZQEr46p2MKM6UMVHrHqLqpCyseh8yh-j_A
+ *  (created with 'secretkey')
+ * Example request should have header "Authorization: Bearer <put here the above token>".
+ *
+ * Inspiration - https://aboullaite.me/spring-boot-token-authentication-using-jwt/
+ *
  */
 
 // This Filter is used in dev mode, i.e. in development environments. (as "default")
@@ -32,7 +38,7 @@ public class AuthorizationHeaderJwtFilter extends GenericFilterBean {
 
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
         final HttpServletResponse response = (HttpServletResponse) servletResponse;
-        final String authHeader = request.getHeader("authorization");
+        final String authHeader = request.getHeader("authorization");  // "HTTP header names are case-insensitive, according to RFC 2616"
 
         if ("OPTIONS".equals(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
@@ -52,18 +58,29 @@ public class AuthorizationHeaderJwtFilter extends GenericFilterBean {
                     // @TODO do something about secretkey
                     claims = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody();
                 } catch (final SignatureException e) {
-                    throw new ServletException("Invalid token");
+                    throw new ServletException("Invalid token - wrong Signature");
                 }
 
                 final String domain = claims.get("domain", String.class);
                 final String adapterName = claims.get("adapterName", String.class);
-                request.setAttribute("claims", new AuthorizationHeaderClaims(domain, adapterName));
+
+                if (domain == null || domain.trim().isEmpty()) {
+                    throw new ServletException("Invalid token - wrong domain:" + domain);
+                }
+                if (adapterName == null || adapterName.trim().isEmpty()) {
+                    throw new ServletException("Invalid token - wrong adapterName:" + adapterName);
+                }
+
+                request.setAttribute("claims", new AuthorizationHeaderClaims(domain.trim(), adapterName.trim()));
             }
 
             filterChain.doFilter(request, response);
         }
     }
 
+    /*
+     * Launched if request has missing "Bearer " string in "Authorization" HTTP header field.
+     */
     void onMissingAuthorizationHeader(HttpServletRequest request) throws ServletException {
         // In development mode, if client does not provide JWT token, then we assume defaults.
         //  (In order to make it easier for newbie developers.)
