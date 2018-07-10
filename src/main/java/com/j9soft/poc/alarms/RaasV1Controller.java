@@ -23,9 +23,6 @@ public class RaasV1Controller implements RaasV1 {
     //
     private RaasDao raasDao;
 
-    @Autowired
-    private AuthorizationHeaderParser authorizationHeaderParser;
-
 
     @Autowired
     RaasV1Controller(RaasDao raasDao) {
@@ -43,16 +40,11 @@ public class RaasV1Controller implements RaasV1 {
         //return "{\"ala\":\"ma kota\"}";
     }
 
-    // @Override  // @TODO I should define a correct name for the interface
+    // @Override  // @TODO I should define a correct method name in the interface
     @GetMapping   // @TODO It should be: @PutMapping
     @RequestMapping("/v1/rawalarms/{notificationIdentifier}")
     public String putAlarm(@PathVariable("notificationIdentifier") String notificationIdentifier,
-            @RequestHeader(value = "authorization",
-                    defaultValue = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb21haW4iOiJkZXYiLCJhZGFwdGVyTmFtZSI6IkFkYXB0ZXJUZXN0IiwiaWF0IjoxNTE2MjM5MDIyfQ.TgxX8dxUgehgcJF6aYIcqwFE308OCHFm4bPCCefJwzM")
-                      // Default value generated on https://jwt.io/ with "secret".
-                    String authorizationHeader ) {
-
-        AuthorizationHeaderClaims claims = this.authorizationHeaderParser.parse(authorizationHeader);
+            @RequestAttribute(name = "claims") AuthorizationHeaderClaims claims) {
 
         ObjectMapper mapper = new ObjectMapper();
 
@@ -60,8 +52,8 @@ public class RaasV1Controller implements RaasV1 {
             return mapper.writeValueAsString(claims);
 
         } catch (JsonProcessingException e) {
-            logger.info("putAlarm", authorizationHeader, e);
-            return "Authorization Header exception was logged.";
+            logger.info("putAlarm", notificationIdentifier, e);
+            return "Authorization Header - Claims exception was logged.";
         }
     }
 
