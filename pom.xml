@@ -96,6 +96,7 @@
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+    <!-- play with JWT tokens -->
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
@@ -103,6 +104,7 @@
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+    <!-- serialize Objects to JSON -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
@@ -110,6 +112,7 @@
     </dependency>
 
     <!-- https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-devtools.html -->
+    <!-- runtime reload of newly compiled classes -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-devtools</artifactId>

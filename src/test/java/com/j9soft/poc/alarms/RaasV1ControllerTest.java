@@ -8,6 +8,10 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
+/*
+ * I assume it is enough to test controller methods without testing HTTP wiring. (i.e. without TestRestTemplate, etc.)
+ * (See also: https://spring.io/guides/gs/spring-boot/  @Autowired private TestRestTemplate template;  )
+ */
 public class RaasV1ControllerTest {
 
     private static final String ALARM_NOID = "eric2g:341";
@@ -30,7 +34,7 @@ public class RaasV1ControllerTest {
     @Test
     public void whenGettingOneRawAlarm_resultIsJson() {
 
-        // Let's register what should be returned.
+        // Let's register what should be returned by DAO to our tested controller.
         //
         when(raasDaoMock.queryAlarm("todo", "todo", ALARM_NOID)).thenReturn(ALARM_JSON);
 
