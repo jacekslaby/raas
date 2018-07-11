@@ -23,7 +23,7 @@ public class RaasDaoCassandraTestConfiguration {
     }
 
     public static final AlarmDetails EXISTING_ALARM =
-            new AlarmDetails("ala", "ma", "kota", "kot ma ale");
+            new AlarmDetails("ala", "ma", "kota", "{\"moIdentifier\":\"kot\"}");
 
     private CassandraConnector client;
 

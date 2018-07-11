@@ -14,6 +14,7 @@ import java.util.Map;
 public class RaasDaoDevMock implements RaasDao {
 
     private final Map<String, String> inMemoryMap = new HashMap<>();
+    private final JSONValuePatchingComponent patcher = new JSONValuePatchingComponent();
 
     @Override
     public String queryAlarm(String domain, String adapterName, String notificationIdentifier) {
@@ -28,10 +29,13 @@ public class RaasDaoDevMock implements RaasDao {
     @Override
     public void createOrPatchAlarm(String domain, String adapterName, String notificationIdentifier, String value) {
         synchronized (inMemoryMap) {
-            String resultJsonValue = inMemoryMap.get(notificationIdentifier);
 
-            if (resultJsonValue != null) {
-                // @TODO we should patch it, but it is complicated, so left for now
+            if (value != null) {
+                // In this case we need to check whether an old value is non empty and patch it.
+                //  (i.e. We do not simply overwrite, because we do not change alarm attributes not provided in new value.)
+                //
+                String oldValue = inMemoryMap.get(notificationIdentifier);
+                value = patcher.patchOldValue(domain, adapterName, notificationIdentifier, value, oldValue);
             }
 
             inMemoryMap.put(notificationIdentifier, value);

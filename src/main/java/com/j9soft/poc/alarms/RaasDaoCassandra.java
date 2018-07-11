@@ -4,6 +4,12 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RaasDaoCassandra implements RaasDao {
 
@@ -15,10 +21,13 @@ public class RaasDaoCassandra implements RaasDao {
 
     private Session session;
 
+    private final JSONValuePatchingComponent patcher;
+
     public RaasDaoCassandra(Session session) {
         this.session = session;
         this.createKeyspaceIfMissing();
         this.createTableIfMissing();
+        this.patcher = new JSONValuePatchingComponent();
     }
 
     private void createKeyspaceIfMissing() {
@@ -71,6 +80,14 @@ public class RaasDaoCassandra implements RaasDao {
     @Override
     public void createOrPatchAlarm(String domain, String adapterName, String notificationIdentifier, String value) {
 
+        if (value != null) {
+            // In this case we need to check whether an old value is non empty and patch it.
+            //  (i.e. We do not simply overwrite, because we do not change alarm attributes not provided in new value.)
+            //
+            String oldValue = this.queryAlarm(domain, adapterName, notificationIdentifier);
+            value = patcher.patchOldValue(domain, adapterName, notificationIdentifier, value, oldValue);
+        }
+
         StringBuilder sb = new StringBuilder("INSERT INTO ")
                 .append(KEYSPACE_NAME).append(".raw_active_alarms")
                 .append(" (virtual_partition, adapter_name, notification_identifier, d) VALUES (?,?,?,?);");
@@ -81,4 +98,6 @@ public class RaasDaoCassandra implements RaasDao {
 
         session.execute( prepared.bind(0, adapterName, notificationIdentifier, value) );
     }
+
+
 }

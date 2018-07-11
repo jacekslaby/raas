@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS raas.raw_active_alarms(
   PRIMARY KEY( virtual_partition, adapter_name, notification_identifier)
   );
 
-INSERT INTO raas.raw_active_alarms(virtual_partition, adapter_name, notification_identifier, d) VALUES(0, 'ma', 'kota', 'kot ma ale');
+INSERT INTO raas.raw_active_alarms(virtual_partition, adapter_name, notification_identifier, d) VALUES(0, 'ma', 'kota', '{"moIdentifier":"kot"}');
 
