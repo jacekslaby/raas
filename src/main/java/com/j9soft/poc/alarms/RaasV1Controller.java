@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 @RestController
 public class RaasV1Controller implements RaasV1 {
 
-    final private Logger logger = LoggerFactory.getLogger(RaasV1Controller.class);
+    private static final Logger logger = LoggerFactory.getLogger(RaasV1Controller.class);
 
     // @Autowired  - is not used because:
     // https://spring.io/blog/2016/04/15/testing-improvements-in-spring-boot-1-4

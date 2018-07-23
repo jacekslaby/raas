@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class CassandraConnector {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CassandraConnector.class);
+    private static final Logger logger = LoggerFactory.getLogger(CassandraConnector.class);
 
     private Cluster cluster;
 
@@ -25,10 +25,10 @@ public class CassandraConnector {
         cluster = b.build();
 
         Metadata metadata = cluster.getMetadata();
-        LOG.info("ClusterName: " + metadata.getClusterName());
+        logger.info("ClusterName: " + metadata.getClusterName());
 
         for (Host host : metadata.getAllHosts()) {
-            LOG.info("Host.datacenter: " + host.getDatacenter() + " Host.address: " + host.getAddress() + " Host.rack: " + host.getRack());
+            logger.info("Host.datacenter: " + host.getDatacenter() + " Host.address: " + host.getAddress() + " Host.rack: " + host.getRack());
         }
 
         session = cluster.connect();
