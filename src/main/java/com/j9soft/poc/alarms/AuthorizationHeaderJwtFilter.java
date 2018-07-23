@@ -86,6 +86,6 @@ class AuthorizationHeaderJwtFilter extends GenericFilterBean {
         // In development mode, if client does not provide JWT token, then we assume defaults.
         //  (In order to make it easier for newbie developers.)
         //
-        request.setAttribute("claims", new RawAlarmsPartitionDefinition("dev", "AdapterTest"));
+        request.setAttribute("partitionDefinition", new RawAlarmsPartitionDefinition("dev", "AdapterTest"));
     }
 }
