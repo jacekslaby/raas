@@ -30,11 +30,14 @@ public class RaasV1Controller implements RaasV1 {
 
     @Override
     @GetMapping("/v1/rawalarms")
-    public String rawAlarms(@RequestParam(value = "notificationIdentifier") String notificationIdentifier) {
+    public String rawAlarms(@RequestParam(value = "notificationIdentifier") String notificationIdentifier,
+                            @RequestAttribute(name = "partitionDefinition") RawAlarmsPartitionDefinition partitionDefinition) {
 
-        logger.info("rawAlarms(notificationIdentifier='{}')", notificationIdentifier);
+        logger.info("rawAlarms(notificationIdentifier='{}', domain='{}', adapterName='{}')",
+                notificationIdentifier, partitionDefinition.getDomain(), partitionDefinition.getAdapterName());
 
-        return this.raasDao.queryAlarm("todo", "todo", notificationIdentifier);
+        return this.raasDao.queryAlarm(partitionDefinition.getDomain(), partitionDefinition.getAdapterName(),
+                notificationIdentifier);
     }
 
     // Note: Using PATCH in this way is discouraged in  https://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/
