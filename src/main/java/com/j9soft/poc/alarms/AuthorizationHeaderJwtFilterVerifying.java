@@ -6,15 +6,16 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-/*
- * https://aboullaite.me/spring-boot-token-authentication-using-jwt/
+/**
+ * This Filter is used in production mode, i.e. it verifies signatures for JWT.
+ *
+ * Inspiration: https://aboullaite.me/spring-boot-token-authentication-using-jwt/
+ *
+ * @see AuthorizationHeaderJwtFilter
  */
-
-// This Filter is used in production mode, i.e. it verifies signatures for JWT.
-//
 @Profile("prod")
 @Component
-public class AuthorizationHeaderJwtFilterVerifying extends AuthorizationHeaderJwtFilter {
+class AuthorizationHeaderJwtFilterVerifying extends AuthorizationHeaderJwtFilter {
 
     @Override
     void onMissingAuthorizationHeader(HttpServletRequest request) throws ServletException {

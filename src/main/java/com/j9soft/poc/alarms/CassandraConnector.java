@@ -7,7 +7,10 @@ import com.datastax.driver.core.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CassandraConnector {
+/**
+ * Provider of session(s) connected to a Cassandra instance.
+ */
+class CassandraConnector {
 
     private static final Logger logger = LoggerFactory.getLogger(CassandraConnector.class);
 
@@ -15,7 +18,7 @@ public class CassandraConnector {
 
     private Session session;
 
-    public void connect(final String node, final Integer port) {
+    void connect(final String node, final Integer port) {
 
         Cluster.Builder b = Cluster.builder().addContactPoint(node);
 
@@ -34,11 +37,11 @@ public class CassandraConnector {
         session = cluster.connect();
     }
 
-    public Session getSession() {
+    Session getSession() {
         return this.session;
     }
 
-    public void close() {
+    void close() {
         session.close();
         cluster.close();
     }

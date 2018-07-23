@@ -11,7 +11,6 @@ import static com.j9soft.poc.alarms.RaasDaoCassandraTestConfiguration.EXISTING_A
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.junit.Assert.fail;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RaasDaoCassandraBootstrapTest {

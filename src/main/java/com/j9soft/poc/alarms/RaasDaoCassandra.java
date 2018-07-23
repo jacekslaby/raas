@@ -5,6 +5,11 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 
+/**
+ * Implementation of data access layer (DAO) based on Apache Cassandra (noSQL database).
+ *
+ * Session to Cassandra cluster needs to be provided in constructor. (i.e. a dependency)
+ */
 public class RaasDaoCassandra implements RaasDao {
 
     static final String KEYSPACE_NAME = "raas";
@@ -13,7 +18,7 @@ public class RaasDaoCassandra implements RaasDao {
 
     private static final String TABLE_NAME_RAW_ACTIVE_ALARMS = "raw_active_alarms";
 
-    private Session session;
+    private final Session session;
 
     private final JSONValuePatchingComponent patcher;
 

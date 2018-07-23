@@ -1,6 +1,6 @@
 package com.j9soft.poc.alarms;
 
-public class RawAlarm {
+class RawAlarm {
     private String notificationIdentifier;
     private String value; // JSON with attributes
 

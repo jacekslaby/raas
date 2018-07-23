@@ -34,7 +34,7 @@ public class RaasDaoCassandraTestConfiguration {
         if (!withEmptyDatabase) {
             // We should populate the database with sample data.
             CQLDataLoader dataLoader = new CQLDataLoader(client.getSession());
-            dataLoader.load(new ClassPathCQLDataSet("testDataSet.xml", RaasDaoCassandra.KEYSPACE_NAME));
+            dataLoader.load(new ClassPathCQLDataSet("testDataSet.cql", RaasDaoCassandra.KEYSPACE_NAME));
         }
     }
 

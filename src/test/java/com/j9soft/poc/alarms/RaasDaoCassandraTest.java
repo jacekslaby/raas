@@ -2,6 +2,7 @@ package com.j9soft.poc.alarms;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.thrift.transport.TTransportException;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -9,7 +10,6 @@ import org.junit.*;
 import org.junit.runners.MethodSorters;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.j9soft.poc.alarms.RaasDaoCassandraTestConfiguration.EXISTING_ALARM;
@@ -86,7 +86,7 @@ public class RaasDaoCassandraTest {
                 EXISTING_ALARM.domain, EXISTING_ALARM.adapterName, EXISTING_ALARM.notificationIdentifier);
 
         final ObjectMapper mapper = new ObjectMapper();
-        Map<String, Object> newValue = mapper.readValue(json, HashMap.class);
+        Map<String, Object> newValue = mapper.readValue(json, new TypeReference<Map<String, Object>>() {});
 
         assertThat(newValue.get("additionalText"), is("serious stuff"));
     }

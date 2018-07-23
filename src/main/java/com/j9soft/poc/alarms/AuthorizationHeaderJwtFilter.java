@@ -15,22 +15,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*
+/**
+ * A filter to extract domain and adapter name from the "Authorization" header of a servlet request.
+ *
+ * This Filter is used in dev mode, i.e. in development environments. (as "default")
+ *  (BTW: In prod (i.e. production) mode a different one may be used. E.g. in case when no other filtering is installed to verify token's signature.)
+ *
  * How to generate a dev token - https://jwt.io/
  * Example token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkb21haW4iOiJDQWRldiIsImFkYXB0ZXJOYW1lIjoiQWRhcHRlclRlc3QiLCJpYXQiOjE1MTYyMzkwMjJ9.gnwRsh2DMZQEr46p2MKM6UMVHrHqLqpCyseh8yh-j_A
  *  (created with 'secretkey')
- * Example request should have header "Authorization: Bearer <put here the above token>".
+ * Example request should have header "Authorization: Bearer <put here the above token>".   (Remember about "Bearer: " !!)
  *
  * Inspiration - https://aboullaite.me/spring-boot-token-authentication-using-jwt/
- *
  */
-
-// This Filter is used in dev mode, i.e. in development environments. (as "default")
-//  (BTW: In prod (i.e. production) mode a different one may be used. E.g. in case when no other filtering is installed to verify token's signature.)
-//
 @Profile("default")
 @Component
-public class AuthorizationHeaderJwtFilter extends GenericFilterBean {
+class AuthorizationHeaderJwtFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -80,6 +80,7 @@ public class AuthorizationHeaderJwtFilter extends GenericFilterBean {
 
     /*
      * Launched if request has missing "Bearer " string in "Authorization" HTTP header field.
+     * This method should be overwritten by production-mode class(es).
      */
     void onMissingAuthorizationHeader(HttpServletRequest request) throws ServletException {
         // In development mode, if client does not provide JWT token, then we assume defaults.

@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
-// This Dao is used in dev mode, i.e. in development environments.
-//  (BTW: In prod (i.e. production) mode a different Dao is used. One which connects to a real DB.)
-//
+/**
+ * Implementation of data access layer (DAO) based on a hashmap kept in memory.
+ *
+ * This Dao is used in dev mode, i.e. in development environments.
+ * (BTW: In prod (i.e. production) mode a different Dao is used. One which connects to a real DB.)
+ */
 @Profile("default")
 @Service
 public class RaasDaoDevMock implements RaasDao {

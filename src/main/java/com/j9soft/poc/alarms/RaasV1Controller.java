@@ -8,8 +8,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 
-// See https://spring.io/guides/gs/spring-boot/
-
+/**
+ * Servlet based implementation of Raw Active Alarms Store API (v.1).
+ *
+ * For each request the Domain and Adapter Name need to be provided by an implementation of javax.servlet.Filter
+ * as a RequestAttribute named "partitionDefinition".
+ * (See {@link AuthorizationHeaderJwtFilter} for details about the context provided in "Authorization" header.)
+ *
+ * This implementation is based on Spring Boot annotations for request mappings.
+ * See https://spring.io/guides/gs/spring-boot/
+ */
 @RestController
 public class RaasV1Controller implements RaasV1 {
 
@@ -19,7 +27,7 @@ public class RaasV1Controller implements RaasV1 {
     // https://spring.io/blog/2016/04/15/testing-improvements-in-spring-boot-1-4
     // "Don’t use field injection as it just makes your tests harder to write."
     //
-    private RaasDao raasDao;
+    private final RaasDao raasDao;
 
 
     @Autowired
@@ -40,9 +48,13 @@ public class RaasV1Controller implements RaasV1 {
                 notificationIdentifier);
     }
 
-    // Note: Using PATCH in this way is discouraged in  https://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/
-    //   and yet neither PUT nor POST fit here.  (because client can use this method as 'upsert', i.e. create or partially update)
-    //
+    /**
+     * Creates or updates an alarm.
+     *
+     * When updating an existing alarm it does not remove not provided attributes, i.e. the previous ones are kept.
+     * Note: Using PATCH method in this way is discouraged in  https://williamdurand.fr/2014/02/14/please-do-not-patch-like-an-idiot/
+     *   and yet neither PUT nor POST fit here.  (because client can use this method as 'upsert', i.e. create or partially update)
+     */
     @Override
     @PatchMapping("/v1/rawalarms/{notificationIdentifier}")
     public void patchRawAlarm(@PathVariable("notificationIdentifier") String notificationIdentifier,
